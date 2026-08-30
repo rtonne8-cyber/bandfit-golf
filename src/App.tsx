@@ -112,17 +112,18 @@ function NextUp({ state, onStart }: { state: ReturnType<typeof getProgrammeState
 }
 
 function Programme({ phaseId, onSelectExercise }: { phaseId: PhaseId; onSelectExercise: (exerciseId: string) => void }) {
-  const phase = PHASES.find((p) => p.id === phaseId)!;
+  const [selectedPhaseId, setSelectedPhaseId] = useState<PhaseId>(phaseId);
+  const phase = PHASES.find((p) => p.id === selectedPhaseId)!;
 
   return (
     <section className="screen">
       <PageTitle title="Programme" subtitle={`${phase.name}: ${phase.intent}`} />
       <div className="phaseRow">
         {PHASES.map((p) => (
-          <div key={p.id} className={p.id === phaseId ? "phase active" : "phase"}>
+          <button key={p.id} className={p.id === selectedPhaseId ? "phase active" : "phase"} onClick={() => setSelectedPhaseId(p.id)}>
             <strong>{p.name}</strong>
             <span>Weeks {p.weeks}</span>
-          </div>
+          </button>
         ))}
       </div>
       {WORKOUTS.map((workout) => (
@@ -134,7 +135,7 @@ function Programme({ phaseId, onSelectExercise }: { phaseId: PhaseId; onSelectEx
             </div>
             <strong>{workout.intensity}</strong>
           </div>
-          <ExerciseList prescriptions={workout.prescriptions[phaseId]} onSelectExercise={onSelectExercise} />
+          <ExerciseList prescriptions={workout.prescriptions[selectedPhaseId]} onSelectExercise={onSelectExercise} />
         </section>
       ))}
     </section>
@@ -164,15 +165,24 @@ function Progress() {
         {progress.length === 0 ? (
           <p className="muted">No sets logged yet. Complete Workout A to start building recommendations.</p>
         ) : (
-          progress.map((item) => (
-            <article className="progressRow" key={item.exercise.id}>
-              <div>
+          <div className="progressTable">
+            <div className="progressHeader">
+              <span>Exercise</span>
+              <span>Sets logged</span>
+              <span>Band</span>
+              <span>RPE</span>
+              <span>Recommendation</span>
+            </div>
+            {progress.map((item) => (
+              <article className="progressGridRow" key={item.exercise.id}>
                 <strong>{item.exercise.name}</strong>
-                <span>{item.completedSets} sets logged{item.latestBand ? ` - latest ${item.latestBand}` : ""}</span>
-              </div>
-              <p>{item.recommendation}</p>
-            </article>
-          ))
+                <span>{item.completedSets}</span>
+                <span>{item.latestBand ?? "-"}</span>
+                <span>{item.latestRpe ?? "-"}</span>
+                <p>{item.recommendation}</p>
+              </article>
+            ))}
+          </div>
         )}
       </section>
       <section className="panel">
@@ -472,7 +482,10 @@ function ExerciseCard({
           </button>
           <span>{prescription.sets} x {prescription.target}{prescription.rpe ? ` - RPE ${prescription.rpe}` : ""}</span>
         </div>
-        <small>{exercise.setup}</small>
+        <div className="exerciseActions">
+          <VideoLink exercise={exercise} />
+          <small>{exercise.setup}</small>
+        </div>
       </div>
       <p>{exercise.cues}</p>
       {prescription.note && <p className="note">{prescription.note}</p>}
@@ -503,6 +516,16 @@ function ExerciseCard({
       )}
       {setLogs.length > 0 && <SetPills setLogs={setLogs} />}
     </article>
+  );
+}
+
+function VideoLink({ exercise }: { exercise: ReturnType<typeof getExercise> }) {
+  const override = useLiveQuery(() => db.exerciseVideos.get(exercise.id), [exercise.id]);
+  const url = override?.videoUrl ?? exercise.videoUrl;
+  return (
+    <a className="videoButton" href={url ?? undefined} target="_blank" rel="noreferrer" aria-disabled={!url}>
+      Video
+    </a>
   );
 }
 

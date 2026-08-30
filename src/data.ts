@@ -124,7 +124,7 @@ function ex(id: string, name: string, pattern: string, equipment: string, setup:
     substitution: equipment.includes("Band")
       ? "Use a lighter band, step closer to the anchor, or reduce range until the final reps are controlled."
       : "Use support, reduce range, or slow the tempo before choosing a harder variation.",
-    videoUrl: null
+    videoUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${name} exercise form`)}`
   };
 }
 

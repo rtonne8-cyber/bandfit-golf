@@ -244,6 +244,9 @@ h3 {
   border-radius: 8px;
   background: #fff;
   border: 1px solid #ddd6ca;
+  color: #1d2825;
+  text-align: left;
+  cursor: pointer;
 }
 
 .phase span,
@@ -275,6 +278,32 @@ h3 {
 
 .exerciseTitle:disabled {
   cursor: default;
+}
+
+.exerciseActions {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  min-width: 150px;
+}
+
+.videoButton {
+  display: inline-grid;
+  place-items: center;
+  min-width: 72px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #163832;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.videoButton[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.45;
 }
 
 .exerciseCard p {
@@ -383,13 +412,44 @@ h3 {
   border-color: #ddd6ca;
 }
 
-.progressRow {
+.progressRow,
+.progressGridRow {
   padding: 12px 0;
   border-top: 1px solid #ebe5da;
 }
 
 .progressRow p {
   max-width: 360px;
+  margin-bottom: 0;
+  color: #35423f;
+}
+
+.progressTable {
+  display: grid;
+  gap: 0;
+}
+
+.progressHeader,
+.progressGridRow {
+  display: grid;
+  grid-template-columns: minmax(210px, 2fr) minmax(88px, 0.7fr) minmax(78px, 0.7fr) minmax(56px, 0.5fr) minmax(260px, 2fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.progressHeader {
+  padding: 0 0 8px;
+  color: #60706b;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.progressGridRow span {
+  color: #35423f;
+}
+
+.progressGridRow p {
   margin-bottom: 0;
   color: #35423f;
 }
@@ -522,6 +582,23 @@ h3 {
 
   .logGrid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .exerciseActions {
+    justify-items: start;
+  }
+
+  .progressHeader {
+    display: none;
+  }
+
+  .progressGridRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .progressGridRow strong,
+  .progressGridRow p {
+    grid-column: 1 / -1;
   }
 
   .screen {

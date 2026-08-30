@@ -56,6 +56,7 @@ describe("programme content", () => {
       expect(exercise.setup.length).toBeGreaterThan(3);
       expect(exercise.safety.length).toBeGreaterThan(10);
       expect(exercise.substitution.length).toBeGreaterThan(10);
+      expect(exercise.videoUrl).toContain("youtube.com/results");
     }
   });
 
