@@ -109,7 +109,23 @@ export function nextSessionType(completed: SessionType[]): SessionType {
 }
 
 function ex(id: string, name: string, pattern: string, equipment: string, setup: string, focus: string, cues: string): Exercise {
-  return { id, name, pattern, equipment, setup, focus, cues };
+  return {
+    id,
+    name,
+    pattern,
+    equipment,
+    setup,
+    focus,
+    cues,
+    description: `${name} supports the ${focus.toLowerCase()} part of the programme. Use it to build ${pattern.toLowerCase()} capacity that carries into a stronger, more stable golf swing.`,
+    safety: equipment.includes("door anchor")
+      ? "Check the anchor, close the door fully, and set the pull so the band draws the door into the frame where possible."
+      : "Work through pain-free range only and stop the set when control or balance breaks.",
+    substitution: equipment.includes("Band")
+      ? "Use a lighter band, step closer to the anchor, or reduce range until the final reps are controlled."
+      : "Use support, reduce range, or slow the tempo before choosing a harder variation.",
+    videoUrl: null
+  };
 }
 
 function workout(

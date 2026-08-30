@@ -1,6 +1,8 @@
 export type SessionType = "A" | "B" | "C";
 export type PhaseId = "foundation" | "build" | "performance";
 export type TrackingMode = "reps" | "seconds" | "quality";
+export type MetricType = "swing_speed" | "rom_thoracic" | "rom_hip" | "rom_reach" | "bodyweight";
+export type Side = "L" | "R";
 
 export interface Exercise {
   id: string;
@@ -10,6 +12,10 @@ export interface Exercise {
   setup: string;
   focus: string;
   cues: string;
+  description: string;
+  safety: string;
+  substitution: string;
+  videoUrl: string | null;
 }
 
 export interface Prescription {
@@ -54,4 +60,19 @@ export interface SetLog {
   value: number | null;
   bandLevel: string | null;
   rpe: number | null;
+}
+
+export interface MetricLog {
+  id: string;
+  date: string;
+  type: MetricType;
+  value: number;
+  unit: string;
+  side?: Side;
+  device?: string;
+}
+
+export interface ExerciseVideo {
+  exerciseId: string;
+  videoUrl: string | null;
 }

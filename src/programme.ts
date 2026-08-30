@@ -63,23 +63,31 @@ export function prescriptionsFor(type: SessionType, phaseId: PhaseId): Prescript
 }
 
 export function progressForExercises(sessionLogs: SessionLog[], setLogs: SetLog[]): ExerciseProgress[] {
-  const completedIds = new Set(sessionLogs.filter((s) => s.completed).map((s) => s.id));
+  const completedSessions = sessionLogs.filter((s) => s.completed);
+  const completedIds = new Set(completedSessions.map((s) => s.id));
+  const sessionById = new Map(completedSessions.map((s) => [s.id, s]));
   const completedSetLogs = setLogs.filter((s) => completedIds.has(s.sessionLogId));
-  const prescriptionById = new Map(WORKOUTS.flatMap((w) => Object.values(w.prescriptions).flat()).map((p) => [p.id, p]));
+
+  function targetForSetLog(setLog: SetLog): number {
+    const session = sessionById.get(setLog.sessionLogId);
+    if (!session) return 0;
+    return getWorkout(session.templateId).prescriptions[session.phaseId].find((p) => p.id === setLog.prescriptionId)?.targetMax ?? 0;
+  }
 
   return EXERCISES.map((exercise) => {
     const rows = completedSetLogs.filter((s) => s.exerciseId === exercise.id);
     const latest = rows.length > 0 ? rows[rows.length - 1] : undefined;
-    const latestPrescription = latest ? prescriptionById.get(latest.prescriptionId) : undefined;
-    const targetMax = latestPrescription?.targetMax ?? 0;
-    const targetHits = targetMax === 0 ? 0 : rows.filter((s) => (s.value ?? 0) >= targetMax && (s.rpe ?? 10) <= 8).length;
+    const targetHits = rows.filter((s) => {
+      const target = targetForSetLog(s);
+      return target > 0 && (s.value ?? 0) >= target && (s.rpe ?? 10) <= 8;
+    }).length;
     return {
       exercise,
       latestBand: latest?.bandLevel ?? null,
       latestRpe: latest?.rpe ?? null,
       completedSets: rows.length,
       targetHits,
-      recommendation: recommendationFor(rows, targetMax)
+      recommendation: recommendationFor(rows, targetForSetLog)
     };
   }).filter((p) => p.completedSets > 0 || p.exercise.equipment.includes("Band"));
 }
@@ -91,13 +99,19 @@ export function nextBandLevel(current: string | null): string | null {
   return BAND_ORDER[idx + 1];
 }
 
-function recommendationFor(rows: SetLog[], targetMax: number): string {
+function recommendationFor(rows: SetLog[], targetForSetLog: (setLog: SetLog) => number): string {
   if (rows.length === 0) return "Start light and make the final 2-3 reps challenging.";
   const lastSix = rows.slice(-6);
   const latest = lastSix.length > 0 ? lastSix[lastSix.length - 1] : undefined;
-  const misses = lastSix.filter((s) => targetMax > 0 && (s.value ?? 0) < targetMax).length;
+  const misses = lastSix.filter((s) => {
+    const target = targetForSetLog(s);
+    return target > 0 && (s.value ?? 0) < target;
+  }).length;
   const highRpe = lastSix.some((s) => (s.rpe ?? 0) >= 9);
-  const cleanHits = lastSix.length >= 4 && lastSix.every((s) => targetMax > 0 && (s.value ?? 0) >= targetMax && (s.rpe ?? 10) <= 8);
+  const cleanHits = lastSix.length >= 4 && lastSix.every((s) => {
+    const target = targetForSetLog(s);
+    return target > 0 && (s.value ?? 0) >= target && (s.rpe ?? 10) <= 8;
+  });
   if (cleanHits) {
     const next = nextBandLevel(latest?.bandLevel ?? null);
     return next ? `Progress next time: try ${next} band or step farther from the anchor.` : "Progress next time: slow the lowering phase or use a harder variation.";

@@ -15,18 +15,24 @@ This repo is a separate Codex-built app. It keeps the reusable architecture idea
 - Local session history, set logging, reps/seconds, band level and RPE.
 - Progress recommendations based on recent clean top-range hits, misses and high-RPE work.
 - PWA packaging with a separate browser database name.
+- Same surface depth as the Claude app: Next Up, Session Runner, Programme, Progress, Metrics, Exercise Detail, and Settings/Data.
+- Editable per-exercise video links, richer cues/setup/safety/substitution content, and a rest timer.
 
 ## Tests
 
-- `npm test` passed: 5 tests.
+- `npm test` passed: 7 tests.
 - `npm run build` passed and generated the production PWA bundle.
 - Local dev server checked at `http://127.0.0.1:5173/` with HTTP 200.
 
 ## Remaining Issues
 
-- No cloud sync or import flow yet.
-- Exercise demonstrations are text-only; no video library has been curated for the new band-only plan.
+- No cloud sync yet.
+- Exercise demonstrations support editable URLs, but no curated video library has been populated for the new band-only plan.
 - Band tension is tracked by named level, not measured force, so progression is deliberately practical rather than exact.
+
+## iPad Recommendation
+
+Keep GitHub private as the source of truth, then deploy a stable PWA URL once the content is signed off. iPad installation should be done from Safari using Share -> Add to Home Screen.
 
 ## Load-Bearing Assumption
 

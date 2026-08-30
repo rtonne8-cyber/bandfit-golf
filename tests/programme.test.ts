@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { EXERCISES, WORKOUTS } from "../src/data";
 import { getProgrammeState, nextBandLevel, progressForExercises } from "../src/programme";
 import type { SessionLog, SetLog } from "../src/types";
 
@@ -44,5 +45,26 @@ describe("band progression", () => {
   it("knows the ordered band levels", () => {
     expect(nextBandLevel("Light")).toBe("Medium");
     expect(nextBandLevel("X-heavy")).toBeNull();
+  });
+});
+
+describe("programme content", () => {
+  it("provides all five app-depth content fields for every exercise", () => {
+    for (const exercise of EXERCISES) {
+      expect(exercise.description.length).toBeGreaterThan(20);
+      expect(exercise.cues.length).toBeGreaterThan(10);
+      expect(exercise.setup.length).toBeGreaterThan(3);
+      expect(exercise.safety.length).toBeGreaterThan(10);
+      expect(exercise.substitution.length).toBeGreaterThan(10);
+    }
+  });
+
+  it("has all three phases for all three weekly workouts", () => {
+    expect(WORKOUTS.map((w) => w.id)).toEqual(["A", "B", "C"]);
+    for (const workout of WORKOUTS) {
+      expect(workout.prescriptions.foundation.length).toBeGreaterThan(0);
+      expect(workout.prescriptions.build.length).toBeGreaterThan(0);
+      expect(workout.prescriptions.performance.length).toBeGreaterThan(0);
+    }
   });
 });
