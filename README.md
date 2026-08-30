@@ -24,6 +24,8 @@ The app tracks completed sessions, current week, phase, sets, reps or seconds, b
 
 This app mirrors the original Swing Gains deployment path: GitHub Pages from the `main` branch via `.github/workflows/deploy.yml`.
 
+Important: the original `swing-gains` repo is public. GitHub Pages is blocked for this private `bandfit-golf` repo on the current GitHub plan, so either make this repo public or use another HTTPS host.
+
 Once Pages is enabled for the repo, the expected app URL is:
 
 ```text

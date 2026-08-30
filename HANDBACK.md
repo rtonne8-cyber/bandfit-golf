@@ -32,7 +32,9 @@ This repo is a separate Codex-built app. It keeps the reusable architecture idea
 
 ## iPad Recommendation
 
-Keep GitHub private as the source of truth, then deploy a stable PWA URL once the content is signed off. iPad installation should be done from Safari using Share -> Add to Home Screen.
+The original Swing Gains app used GitHub Pages from a public repo. BandFit Golf now has the same workflow and PWA base-path setup, but GitHub Pages is blocked while this repo remains private on the current GitHub plan. The two practical paths are: make `bandfit-golf` public and use `https://rtonne8-cyber.github.io/bandfit-golf/`, or keep the repo private and deploy the app through another HTTPS host.
+
+iPad installation should be done from Safari using Share -> Add to Home Screen.
 
 ## Load-Bearing Assumption
 
