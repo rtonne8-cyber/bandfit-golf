@@ -22,7 +22,15 @@ The app tracks completed sessions, current week, phase, sets, reps or seconds, b
 
 ## iPad path
 
-The best route is to keep this private repo as the source of truth, polish/test locally, then deploy a stable PWA URL. Once deployed, open the URL in Safari on iPad and use Share -> Add to Home Screen.
+This app mirrors the original Swing Gains deployment path: GitHub Pages from the `main` branch via `.github/workflows/deploy.yml`.
+
+Once Pages is enabled for the repo, the expected app URL is:
+
+```text
+https://rtonne8-cyber.github.io/bandfit-golf/
+```
+
+Open that URL in Safari on iPad, then use Share -> Add to Home Screen.
 
 ## Development
 
