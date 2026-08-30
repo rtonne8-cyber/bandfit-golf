@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BandFit Golf icon">
+  <rect width="512" height="512" rx="96" fill="#163832"/>
+  <path d="M142 334c70-42 129-104 176-184" fill="none" stroke="#f6f2ea" stroke-width="34" stroke-linecap="round"/>
+  <path d="M178 358c47 20 102 19 166-3" fill="none" stroke="#b86f3a" stroke-width="28" stroke-linecap="round"/>
+  <circle cx="346" cy="134" r="38" fill="#f6f2ea"/>
+  <path d="M124 382h264" stroke="#f6f2ea" stroke-width="28" stroke-linecap="round"/>
+</svg>
